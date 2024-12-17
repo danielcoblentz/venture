@@ -1,0 +1,116 @@
+/*page styles(background)*/
+body {
+    font-family: 'Noto Sans', sans-serif ;
+    background-color: #1e1e20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.form-container {
+    padding: 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+}
+/*Create account text*/
+h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    text-align: center;
+    margin-bottom: 10px; 
+    color: #fff;
+}
+
+.login-text {
+    text-align: center;
+    margin-bottom: 40px; 
+    font-size: 14px;
+}
+
+.login-text span {
+    color: #888; 
+
+}
+
+.login-link {
+    font-family: 'Space Grotesk', sans-serif;;
+    color: #fff; 
+    text-decoration: none; 
+    font-weight: bold;
+}
+
+/*input fields for user text(email,pass,name)*/
+input, button {
+    font-family: 'Noto Sans', sans-serif;
+    width: 100%; 
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #1c1c1e;
+    color: #fff;
+    box-sizing: border-box; 
+}
+
+input::placeholder {
+    color: #888;
+}
+
+/*sign up button*/
+button {
+    background-color: #fff;
+    color: #000;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #e6e6e6;
+}
+
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-container input {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px; 
+    border: 2px solid #444;
+    border-radius: 4px;
+    background-color: #1c1c1e;
+    appearance: none;
+    cursor: pointer;
+}
+/*organizer check box styles*/
+.checkbox-container input:checked {
+    background-color: #4285f4;
+    border-color: #4285f4;
+}
+
+.checkbox-container label {
+    color: #fff;
+    font-size: 16px;
+    line-height: 20px; 
+    margin-bottom: 10px;
+}
+
+/*logo styles to keep img centered above create acc, login text*/
+img.Logo {
+    width: 100px;
+    height: 100px;
+    display: block;
+  }
+
+/* Adjust the logo height */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px; /
+}
