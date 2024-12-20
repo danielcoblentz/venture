@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+
+    <!--Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!--sidebar (nav bar)-->
+        <nav class="sidebar">
+            <div class="nav-header">
+                <img src="{{ url_for('static', filename='icons/pin_icon.svg') }}" alt="Pin Icon" class="nav-icon pin-icon">
+                <span class="nav-title">Eventure <span class="nav-subtitle">Create</span></span>
+            </div>
+
+            <!--nav tabs-->
+            <hr class="menu-divider">
+            <span class="menu-title">Menu</span>
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='icons/home_icon.svg') }}" class="nav-icon" alt="Home Icon"> Home
+            </a>
+            <a href="{{ url_for('create_event') }}" id="open-modal-btn">
+                <img src="{{ url_for('static', filename='icons/create_icon.svg') }}" class="nav-icon" alt="Create Icon"> Create
+            </a>
+            <a href="{{ url_for('view_transactions') }}">
+                <img src="{{ url_for('static', filename='icons/transaction_icon.svg') }}" class="nav-icon" alt="Transaction Icon"> Transactions
+            </a>
+            <a href="{{ url_for('account') }}">
+                <img src="{{ url_for('static', filename='icons/account_icon.svg') }}" class="nav-icon" alt="Account Icon"> Account
+            </a>
+            <a href="{{ url_for('about') }}">
+                <img src="{{ url_for('static', filename='icons/about_icon.svg') }}" class="nav-icon" alt="About Icon"> About
+            </a>
+            <a href="{{ url_for('logout') }}" class="logout">
+                <img src="{{ url_for('static', filename='icons/logout_icon.svg') }}" class="nav-icon logout-icon" alt="Logout Icon"> Logout
+            </a>
+        </nav>
+
+        <!--create page-->
+        <main class="create-wrapper">
+            <h1 class="create-header">Create</h1>
+            <hr class="divider">
+
+            <!--form section-->
+            <form class="create-form" method="POST" action="{{ url_for('create_event') }}">
+                <div class="form-group">
+                    <!--event name-->
+                    <label for="event-name">Event Name</label>
+                    <input type="text" id="event-name" name="event_name" placeholder="Enter event name" required>
+                </div>
+                    <!--link-->
+                <div class="form-group">
+                    <label for="event-link">Link</label>
+                    <input type="url" id="event-link" name="event_link" placeholder="Insert link here" required>
+                </div>
+                    <!--date-->
+                <div class="form-group">
+                    <label for="event-date">Date</label>
+                    <input type="date" id="event-date" name="event_date" required>
+                </div>
+                    <!--location-->
+                <div class="form-group">
+                    <label for="event-location">Location</label>
+                    <input type="text" id="event-location" name="event_location" placeholder="Enter event location" required>
+                </div>
+                    <!--price-->
+                <div class="form-group">
+                    <label for="event-cost">Cost to Attend</label>
+                    <input type="number" id="event-cost" name="event_cost" placeholder="Enter cost (e.g., 50.00 USD)" min="0" step="0.01" required>
+                </div>
+                    <!--desc-->
+                <div class="form-group description-group">
+                    <label for="event-description">Description</label>
+                    <textarea id="event-description" name="event_description" rows="8" placeholder="Write a brief event description"></textarea>
+                </div>
+                    <!--tags (dropdown list)-->
+                <div class="form-group">
+                    <label for="event-tags">Tags</label>
+                    <select id="event-tags" name="event_tags" required>
+                        <option value="" disabled selected>Select a tag</option>
+                        <option value="workshop">Workshop</option>
+                        <option value="conference">Academic</option>
+                        <option value="meetup">Meetup</option>
+                        <option value="networking">Networking</option>
+                    </select>
+                </div>
+
+                <div class="form-group form-submit">
+                    <button type="submit" class="create-btn">Create</button> <!--inserts into DB after route executes in app.py-->
+                </div>
+            </form>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create account</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+
+
+    <!--fonts for page-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!--main signup form for users to enter creds (will be trans to signup route then inserted into DB is successful!)-->
+  <div class="form-container">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="Logo">
+    <h1>Create an account</h1>
+    <p class="login-text">
+        <span>Already a member?</span>
+        <a href="{{ url_for('login') }}" class="login-link">Login here</a> <!--route to login form if already a user-->
+    </p>
+
+    <form action="{{ url_for('register') }}" method="POST">
+      <!--input fields below-->
+
+      <!-- username -->
+      <input type="text" id="username" name="username" placeholder="Username" required>
+      <!-- email -->
+      <input type="email" id="email" name="email" placeholder="Email" required>
+      <!-- pass -->
+      <input type="password" id="password" name="password" placeholder="Password" required>
+
+      <!--permissions box (organizer, user)-->
+      <div class="checkbox-container">
+        <input type="checkbox" id="role" name="role" value="organizer">
+        <label for="role">Organizer</label>
+      </div>
+
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
+</body>
+</html>

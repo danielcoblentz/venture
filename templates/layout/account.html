@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account</title>
+    <link rel="stylesheet" href="/styles/style.css">
+    
+
+     <!--fonts for page--> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!--nav bar-->
+        <nav class="sidebar">
+            <div class="nav-header">
+                <img src="/icons/pin_icon.svg" alt="Pin Icon" class="nav-icon pin-icon">
+                <span class="nav-title">
+                    Eventure <span class="nav-subtitle">Account</span>
+                </span>
+            </div>
+
+            <!--nav tabs-->
+            <hr class="menu-divider">
+            <span class="menu-title">Menu</span>
+            <a href="/layout/home.html"><img src="/icons/home_icon.svg" class="nav-icon">Home</a>
+            <a href="/layout/create.html" id="open-modal-btn"><img src="/icons/create_icon.svg" class="nav-icon">Create</a>
+            <a href="/layout/transactions.html"><img src="/icons/transaction_icon.svg" class="nav-icon">Transactions</a>
+            <a href="/layout/account.html"><img src="/icons/account_icon.svg" class="nav-icon">Account</a>
+            <a href="/layout/about.html"><img src="/icons/about_icon.svg" class="nav-icon">About</a>
+            <a href="/layout/login.html" class="logout">
+                <img src="/icons/logout_icon.svg" class="nav-icon logout-icon">Logout
+            </a>
+        </nav>
+    
+
+        <!--account wrapper (form containing acc info)--> 
+        <main class="account-wrapper">
+            <h1>Account Settings</h1>
+
+           <!--email section-->
+            <p><strong>Email Address</strong></p>
+            <div class="section email-section">
+                <div class="email-container">
+                    <p>Your email address is <span class="current-email">{example@gmail.com}</span></p> <!--sample email until populated in DB-->
+                    <span class="text-link" id="change-email">Change</span>
+                </div>
+                <!--hidden email input-->
+                <div class="email-input-container" id="email-input-container" style="display: none;">
+                    <input type="email" id="new-email" placeholder="Enter new email" class="email-input">
+                    <button class="save-btn" id="save-email-btn">Save</button>
+                </div>
+            </div>
+
+            <hr class="divider"> <!--divider between email & pass section-->
+
+            <!--password Section-->
+            <div class="section password-section">
+                <div class="password-header">
+                    <h4>Password</h4>
+                    <span class="text-link" id="toggle-password">Hide</span>
+                </div>
+                <div class="password-container">
+                    <div class="password-inputs">
+                        <div class="input-group">
+                            <label for="new-password">New Password</label>
+                            <input type="password" id="new-password" placeholder="New password">
+                        </div>
+                        <div class="input-group">
+                            <label for="current-password">Current Password</label>
+                            <input type="password" id="current-password" placeholder="Current password">
+                        </div>
+                    </div>
+                    <button class="save-btn" id="save-password-btn">Save password</button>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+    <!--link to JS file-->
+    <script src="/scripts/script.js"></script>
+ 
+</body>
+</html>

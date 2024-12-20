@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions</title>
+    <link rel="stylesheet" href="/styles/style.css">
+
+    <!--fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!--sidebar (nav bar)-->
+        <nav class="sidebar">
+            <div class="nav-header">
+                <img src="/icons/pin_icon.svg" alt="Pin Icon" class="nav-icon pin-icon">
+                <span class="nav-title">
+                    Eventure <span class="nav-subtitle">Transactions</span>
+                </span>
+            </div>
+            <hr class="menu-divider">
+            <span class="menu-title">Menu</span>
+            <a href="/layout/home.html"><img src="/icons/home_icon.svg" class="nav-icon">Home</a>
+            <a href="/layout/create.html" id="open-modal-btn"><img src="/icons/create_icon.svg" class="nav-icon">Create</a>
+            <a href="/layout/transactions.html"><img src="/icons/transaction_icon.svg" class="nav-icon">Transactions</a>
+            <a href="/layout/account.html"><img src="/icons/account_icon.svg" class="nav-icon">Account</a>
+            <a href="/layout/about.html"><img src="/icons/about_icon.svg" class="nav-icon">About</a>
+            <a href="/layout/login.html" class="logout">
+                <img src="/icons/logout_icon.svg" class="nav-icon logout-icon">Logout
+            </a>
+        </nav>
+
+        <!--main content-->
+        <main class="transactions-wrapper">
+            <!--header-->
+            <h1 class="transactions-header">Transactions</h1>
+            <hr class="divider">
+
+
+            <!--info bar (event name | tags | date |price)-->
+            <div class="combined-search-bar">
+                <input type="text" placeholder="Event Name" class="search-input">
+                <span class="bar-divider">|</span>
+                <select class="search-input">
+                    <option value="" disabled selected>Tag</option>
+                    <option value="completed">Completed</option>
+                    <option value="pending">Pending</option>
+                    <option value="failed">Failed</option>
+                </select>
+                <span class="bar-divider">|</span>
+                <input type="date" class="search-input">
+            </div>
+
+            <!--placeholder for transactions list-->
+            <div class="transactions-content">
+                <!--empty space for dynamic transaction data -->
+                <p>No transactions available.</p> <!--default text-->
+            </div>
+        </main>
+    </div>
+</body>
+</html>

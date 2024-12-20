@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create account</title>
+  <link rel="stylesheet" href="/static/styles/login.css">
+
+    <!--fonts for login up page-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="form-container">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="Logo">
+
+    <h1>Welcome Back!</h1>
+    <p class="login-text">
+        <span>First time here?</span>
+        <a href="{{ url_for('register') }}" class="login-link">Sign up for free</a>
+    </p>
+
+<!--main form for user auth and login-->
+<form action="{{ url_for('login') }}" method="POST">
+
+
+        <!-- email -->
+        <input type="email" id="email" name="email" placeholder="Email" required>
+      
+        <!-- password -->
+        <input type="password" id="password" name="password" placeholder="Password" required>
+      
+         <!-- role checkbox -->
+        <div class="checkbox-container">
+        <input type="checkbox" id="role" name="role" value="organizer">
+        <label for="role">Organizer</label>
+        </div>
+      
+        <!-- submit button -->
+        <button type="submit">Sign in</button>
+      </form>
+      
+  </div>
+</body>
+</html>
