@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account</title>
-    <link rel="stylesheet" href="/styles/style.css">
+    <link rel="stylesheet" href="static\styles\style.css">
     
 
      <!--fonts for page--> 
@@ -17,7 +17,7 @@
         <!--nav bar-->
         <nav class="sidebar">
             <div class="nav-header">
-                <img src="/icons/pin_icon.svg" alt="Pin Icon" class="nav-icon pin-icon">
+                <img src="{{ url_for('static', filename='icons/pin_icon.svg') }}" alt="Pin Icon" class="nav-icon pin-icon">
                 <span class="nav-title">
                     Eventure <span class="nav-subtitle">Account</span>
                 </span>
@@ -26,13 +26,23 @@
             <!--nav tabs-->
             <hr class="menu-divider">
             <span class="menu-title">Menu</span>
-            <a href="/layout/home.html"><img src="/icons/home_icon.svg" class="nav-icon">Home</a>
-            <a href="/layout/create.html" id="open-modal-btn"><img src="/icons/create_icon.svg" class="nav-icon">Create</a>
-            <a href="/layout/transactions.html"><img src="/icons/transaction_icon.svg" class="nav-icon">Transactions</a>
-            <a href="/layout/account.html"><img src="/icons/account_icon.svg" class="nav-icon">Account</a>
-            <a href="/layout/about.html"><img src="/icons/about_icon.svg" class="nav-icon">About</a>
-            <a href="/layout/login.html" class="logout">
-                <img src="/icons/logout_icon.svg" class="nav-icon logout-icon">Logout
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='icons/home_icon.svg') }}" class="nav-icon" alt="Home Icon"> Home
+            </a>
+            <a href="{{ url_for('create_event') }}" id="open-modal-btn">
+                <img src="{{ url_for('static', filename='icons/create_icon.svg') }}" class="nav-icon" alt="Create Icon"> Create
+            </a>
+            <a href="{{ url_for('view_transactions') }}">
+                <img src="{{ url_for('static', filename='icons/transaction_icon.svg') }}" class="nav-icon" alt="Transaction Icon"> Transactions
+            </a>
+            <a href="{{ url_for('account') }}">
+                <img src="{{ url_for('static', filename='icons/account_icon.svg') }}" class="nav-icon" alt="Account Icon"> Account
+            </a>
+            <a href="{{ url_for('about') }}">
+                <img src="{{ url_for('static', filename='icons/about_icon.svg') }}" class="nav-icon" alt="About Icon"> About
+            </a>
+            <a href="{{ url_for('logout') }}" class="logout">
+                <img src="{{ url_for('static', filename='icons/logout_icon.svg') }}" class="nav-icon logout-icon" alt="Logout Icon"> Logout
             </a>
         </nav>
     
@@ -74,14 +84,14 @@
                             <input type="password" id="current-password" placeholder="Current password">
                         </div>
                     </div>
-                    <button class="save-btn" id="save-password-btn">Save password</button>
+                    <button class="save-btn" id="save-password-btn">update password</button>
                 </div>
             </div>
             
         </main>
     </div>
     <!--link to JS file-->
-    <script src="/scripts/script.js"></script>
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
  
 </body>
 </html>

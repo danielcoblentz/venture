@@ -161,14 +161,26 @@ body {
     transform: rotateY(180deg); 
 }
 
-/*preview Panel*/
+/*preview Panel */
 .preview-panel {
-    background-color: #1b1c1e;
-    padding: 10px;
-    overflow-y: auto; /*scrolling for event details if required*/
-    color: #e3e3e3;
+    position: fixed; 
+    top: 0; 
+    right: 0; 
     height: 100%; 
-    width: 100%;
+    width: 14%; 
+    background-color: transparent; 
+    padding: 20px; 
+    overflow-y: auto; 
+}
+#attend-button {
+    background-color: #4285f4;
+    color: #e3e3e3;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 /* ---------------------------------------- icons + layout adjustments*/

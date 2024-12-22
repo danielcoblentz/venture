@@ -55,13 +55,18 @@
                     <img src="{{ url_for('static', filename='icons/create_icon.svg') }}" alt="Create Icon">
                 </div>
 
-                <!-- Search bar-->
-                <div class="search-wrapper">
-                    <input type="text" placeholder="Search..." />
-                    <button class="search-btn">
+                <!-- search bar-->
+                <form class="search-wrapper" method="GET" action="{{ url_for('home') }}">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Search..." 
+                        value="{{ search_query }}"
+                    >
+                    <button type="submit" class="search-btn">
                         <img src="{{ url_for('static', filename='icons/search_icon.svg') }}" alt="Search Icon">
                     </button>
-                </div>
+                </form>
 
                 <!--attending events icon -->
                 <div class="action-item">
@@ -72,23 +77,42 @@
 
             <!--event container (will populate when connected to DB)-->
             <main class="event-container">
-                <div class="event-box">Event 1</div>
-                <div class="event-box">Event 2</div>
-                <div class="event-box">Event 3</div>
-                <div class="event-box">Event 1</div>
-                <div class="event-box">Event 2</div>
-                <div class="event-box">Event 3</div>
-                <div class="event-box">Event 1</div>
-                <div class="event-box">Event 2</div>
-                <div class="event-box">Event 3</div>
+                {% for event in events %}
+                <div 
+                    class="event-box" 
+                    data-id="{{ event.id }}" 
+                    data-name="{{ event.event_name }}"
+                    data-date="{{ event.event_date }}"
+                    data-location="{{ event.location }}"
+                    data-cost="{{ event.cost }}"
+                    data-description="{{ event.description }}"
+                    onclick="showEventDetails(this)"
+                >
+                    <div class="event-info">
+                        <h3>{{ event.event_name }}</h3>
+                        <p>{{ event.event_date }}</p>
+                    </div>
+                    <hr class="event-divider">
+                    <p class="event-location">{{ event.location }}</p>
+                </div>
+                {% else %}
+                <p>No events available. Create one now!</p>
+                {% endfor %}
             </main>
-        </div>
+            
+            
+            
 
 
         <!--event details pannel (info will dynamically populate here once connected to DB after selecting an event) -->
         <aside class="preview-panel">
             <h2>Event Details</h2>
-            <p>Select an event to view details here.</p>
+            <p id="preview-name">Name: Select an event to view details here.</p>
+            <p id="preview-date">Date: </p>
+            <p id="preview-location">Location: </p>
+            <p id="preview-cost">Cost: </p>
+            <p id="preview-description">Description: </p>
+            <button id="attend-button" >attend event</button>
         </aside>
     </div>
 
@@ -98,40 +122,37 @@
         <div class="modal-content">
             <span class="close-btn" id="close-modal-btn">&times;</span>
             <h2>Create Event</h2>
-            <!--form input(name, link, date, location, cost, desc,tags)-->
-            <form class="create-form">
+            <form class="create-form" method="POST" action="{{ url_for('create_event') }}">
                 <div class="form-group">
                     <label for="event-name">Event Name</label>
-                    <input type="text" id="event-name" placeholder="Enter event name" required>
+                    <input type="text" id="event-name" name="event_name" placeholder="Enter event name" required>
                 </div>
                 <div class="form-group">
                     <label for="event-link">Link</label>
-                    <input type="url" id="event-link" placeholder="Insert link here" required>
+                    <input type="url" id="event-link" name="event_link" placeholder="Insert link here" required>
                 </div>
                 <div class="form-group">
                     <label for="event-date">Date</label>
-                    <input type="date" id="event-date" required>
+                    <input type="date" id="event-date" name="event_date" required>
                 </div>
                 <div class="form-group">
                     <label for="event-location">Location</label>
-                    <input type="text" id="event-location" placeholder="Enter location" required>
+                    <input type="text" id="event-location" name="event_location" placeholder="Enter location" required>
                 </div>
                 <div class="form-group">
                     <label for="event-cost">Cost to Attend</label>
-                    <input type="number" id="event-cost" placeholder="Enter cost (e.g., 50.00 USD)" step="0.01" required>
+                    <input type="number" id="event-cost" name="event_cost" placeholder="Enter cost (e.g., 50.00 USD)" step="0.01" required>
                 </div>
                 <div class="form-group">
                     <label for="event-description">Description</label>
-                    <textarea id="event-description" rows="5" placeholder="Write a description.."></textarea>
+                    <textarea id="event-description" name="event_description" rows="5" placeholder="Write a description.."></textarea>
                 </div>
-
-                <!--tags for each event-->
                 <div class="form-group">
                     <label for="event-tags">Tags</label>
-                    <select id="event-tags" required>
+                    <select id="event-tags" name="event_tags" required>
                         <option value="" disabled selected>Select a tag</option>
                         <option value="workshop">Workshop</option>
-                        <option value="conference">Academic</option>
+                        <option value="conference">Conference</option>
                         <option value="meetup">Meetup</option>
                         <option value="networking">Networking</option>
                     </select>
@@ -140,8 +161,10 @@
             </form>
         </div>
     </div>
+    
 
     <!-- link to JS -->
-    <script src="/scripts/script.js"></script>
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+
 </body>
 </html>

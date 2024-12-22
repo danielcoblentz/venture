@@ -25,13 +25,14 @@ CREATE TABLE events (
 
 -- attendance table
 CREATE TABLE attendance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     event_id INT NOT NULL,
-    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (user_id, event_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+    attended_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (event_id) REFERENCES events(id)
 );
+
 
 -- transactions table
 CREATE TABLE transactions (

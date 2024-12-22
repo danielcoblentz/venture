@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-
+# event 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     organizer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -29,4 +29,12 @@ class Event(db.Model):
     description = db.Column(db.Text)
     link = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+# Attendance
+class Attendance(db.Model):
+    __tablename__ = 'attendance'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
+    attended_at = db.Column(db.DateTime, default=db.func.now())
 
