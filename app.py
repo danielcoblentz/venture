@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from models import db, User, Event, Attendance  #add user & event class from models.py so we can create new users and events
+from decimal import Decimal
+from models import db, User, Event, Attendance
+  #add user & event class from models.py so we can create new users and events
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -18,11 +20,6 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-#create the tables if they don't exist print to terminal (debugging)
-with app.app_context():
-    db.create_all()
-    print("DB tables created successfully")
 
 # requirements
 # define the following routes --> home, create, transactions, login/signup, acc, about, logout + additional functions for attending events, searching etc..
@@ -87,7 +84,6 @@ def register():
 
     # If GET request then just render the signup page as is
     return render_template('layout/signup.html')
-
 
 
 # login route ------------------------------------------------------------------------------------------------------>
@@ -181,9 +177,34 @@ def create_event():
 # route for attending events --------------------------------------------------------------------------------------->
 @app.route('/attend-event/<int:event_id>', methods=['POST'])
 @login_required
-
 def attend_event(event_id):
-    # working on the logic 
+    try:
+        # get event from DB 
+        event = Event.query.get_or_404(event_id)
+        print(f"Event found: {event.event_name} (ID: {event_id})")
+
+        # Check balance (debugging rn)
+        print(f"User Balance: {current_user.balance}, Event Cost: {event.cost}")
+        if current_user.balance < event.cost:
+            return jsonify({"message": "Insufficient balance"}), 400
+
+        # Deduct balance from user acc
+        current_user.balance -= event.cost
+        print(f"New User Balance: {current_user.balance}")
+
+        # add attendance 
+        attendance = Attendance(user_id=current_user.id, event_id=event_id)
+        db.session.add(attendance)
+        db.session.commit()
+        print(f"User {current_user.id} is now attending event {event_id}")
+        return jsonify({"message": "Successfully registered"}), 200
+
+    except Exception as e: # error message (debugging)
+        db.session.rollback()
+        print(f"Error attending event: {e}")
+        return jsonify({"message": "An error occurred"}), 500
+
+
 
 
 # ------------------------------------------------------------------------------------------------------------->
@@ -194,6 +215,29 @@ def attend_event(event_id):
 
 def view_transactions():
     return render_template('layout/transactions.html')
+
+# add money to account
+@app.route('/add-balance', methods=['POST'])
+@login_required
+def add_balance():
+    try:
+        # get the amount and convert it to Decimal
+        amount = request.form.get('amount', type=float)
+
+        if not amount or amount <= 0:
+            flash(' enter a valid positive amount.', 'danger')
+            return redirect(url_for('account'))
+
+        current_user.balance += Decimal(str(amount))  
+
+        db.session.commit()# update message
+        flash(f'your balance has been updated by ${amount:.2f}.', 'success')
+
+    except Exception as e:
+        db.session.rollback()
+
+    return redirect(url_for('account'))
+
 
 @app.route('/account')
 @login_required

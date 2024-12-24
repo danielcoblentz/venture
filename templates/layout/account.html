@@ -55,7 +55,7 @@
             <p><strong>Email Address</strong></p>
             <div class="section email-section">
                 <div class="email-container">
-                    <p>Your email address is <span class="current-email">{example@gmail.com}</span></p> <!--sample email until populated in DB-->
+                    <p>Your email address is <span class="current-email">{{ current_user.email }}</span></p> <!--sample email until populated in DB-->
                     <span class="text-link" id="change-email">Change</span>
                 </div>
                 <!--hidden email input-->
@@ -87,6 +87,31 @@
                     <button class="save-btn" id="save-password-btn">update password</button>
                 </div>
             </div>
+
+            <!-- Existing forms and sections -->
+
+<!-- divider for balance -->
+        <hr class="divider">
+
+        <!-- add balance section -->
+        <div class="section balance-section">
+            <h4>Balance</h4>
+            <p>Current Balance: <strong>${{ current_user.balance }}</strong></p> <!-- Display user's current balance -->
+
+            <form action="{{ url_for('add_balance') }}" method="POST" class="balance-form">
+                <label for="add-balance">Add Balance:</label>
+                <input 
+                    type="number" 
+                    id="add-balance" 
+                    name="amount" 
+                    min="0.01" 
+                    step="0.01" 
+                    placeholder="Enter amount" 
+                    required>
+                <button type="submit" class="save-btn">Add Balance</button>
+            </form>
+        </div>
+
             
         </main>
     </div>

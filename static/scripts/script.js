@@ -119,29 +119,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   //function to handle attending an event (currently working on this)
   async function attendEvent(eventId) {
-      try {
-          const response = await fetch(`/attend-event/${eventId}`, {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-          });
+    try {
+        const response = await fetch(`/attend-event/${eventId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-          // return error message to user
-          if (!response.ok) {
-              const error = await response.json();
-              alert(error.message); 
-              return;
-          }
-          
-          //return success message to user
-          const result = await response.json();
-          alert(result.message); 
-      } catch (error) {
-          console.error("error attending the event:", error);
-          alert("error occurred while marking attendance");
-      }
-  }
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message);
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error("Error attending the event:", error);
+        alert("Error occurred while processing your request.");
+    }
+}
+
 });
 
 
