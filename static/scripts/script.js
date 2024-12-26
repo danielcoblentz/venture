@@ -123,8 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await fetch(`/attend-event/${eventId}`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-            },
+                "Content-Type": "application/json"
+            }
         });
 
         const result = await response.json();

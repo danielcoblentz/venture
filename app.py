@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = one
+app.config['SQLALCHEMY_DATABASE_URI'] = None
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 
@@ -179,30 +179,34 @@ def create_event():
 @login_required
 def attend_event(event_id):
     try:
-        # get event from DB 
+        # Fetch event details
         event = Event.query.get_or_404(event_id)
-        print(f"Event found: {event.event_name} (ID: {event_id})")
 
-        # Check balance (debugging rn)
-        print(f"User Balance: {current_user.balance}, Event Cost: {event.cost}")
+        # Check if user has sufficient balance
         if current_user.balance < event.cost:
             return jsonify({"message": "Insufficient balance"}), 400
 
-        # Deduct balance from user acc
+        # Deduct the balance
         current_user.balance -= event.cost
-        print(f"New User Balance: {current_user.balance}")
 
-        # add attendance 
+        # Check if the user is already attending the event
+        existing_attendance = Attendance.query.filter_by(user_id=current_user.id, event_id=event_id).first()
+        if existing_attendance:
+            return jsonify({"message": "You are already registered for this event"}), 400
+
+        # Add attendance record
         attendance = Attendance(user_id=current_user.id, event_id=event_id)
         db.session.add(attendance)
+
+        # Commit changes to database
         db.session.commit()
-        print(f"User {current_user.id} is now attending event {event_id}")
         return jsonify({"message": "Successfully registered"}), 200
 
-    except Exception as e: # error message (debugging)
+    except Exception as e:
         db.session.rollback()
         print(f"Error attending event: {e}")
         return jsonify({"message": "An error occurred"}), 500
+
 
 
 
