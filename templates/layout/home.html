@@ -68,8 +68,8 @@
                     </button>
                 </form>
 
-                <!--attending events icon -->
-                <div class="action-item">
+                <!--attending events icon (will show all attending events for the current user) -->
+                <div class="action-item" onclick="fetchRegisteredEvents()">
                     <img src="{{ url_for('static', filename='icons/star_icon.svg') }}" alt="Attending Events Icon">
                 </div>
             </div>

@@ -194,22 +194,41 @@ def attend_event(event_id):
         if existing_attendance:
             return jsonify({"message": "You are already registered for this event"}), 400
 
-        # Add attendance record
+        # add attendance record
         attendance = Attendance(user_id=current_user.id, event_id=event_id)
         db.session.add(attendance)
 
-        # Commit changes to database
+        # commit changes to DB
         db.session.commit()
         return jsonify({"message": "Successfully registered"}), 200
 
     except Exception as e:
         db.session.rollback()
-        print(f"Error attending event: {e}")
         return jsonify({"message": "An error occurred"}), 500
 
+# ------------------------------------------------------------------------------------------------------------>
+# fetch registered events
+@app.route('/my-events', methods=['GET'])
+@login_required
+def my_events():
+    try:
+        # query all events the user is registered for from DB
+        events = Event.query.join(Attendance, Attendance.event_id == Event.id)\
+            .filter(Attendance.user_id == current_user.id).all()
 
+        # events for the frontend
+        events_data = [{
+            "id": event.id,
+            "name": event.event_name,
+            "date": event.event_date.strftime('%Y-%m-%d'),
+            "location": event.location,
+            "cost": str(event.cost),
+            "description": event.description,
+        } for event in events]
 
-
+        return jsonify(events_data), 200
+    except Exception as e:
+        return jsonify({"message": "Failed to fetch events"}), 500
 
 # ------------------------------------------------------------------------------------------------------------->
 
@@ -248,6 +267,52 @@ def add_balance():
 
 def account():
     return render_template('layout/account.html')
+
+# update email route (account page)
+@app.route('/update-email', methods=['POST'])
+@login_required
+def update_email():
+    try:
+        data = request.get_json()
+        new_email = data.get('email')
+
+        if not new_email:
+            return jsonify({"message": "email is required"}), 400
+
+        # update the email in the database
+        current_user.email = new_email
+        db.session.commit()
+
+        return jsonify({"message": "email updated! you should see the change above"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": "error occurred"}), 500
+
+
+# update password route (account page)
+@app.route('/update-password', methods=['POST'])
+@login_required
+def update_password():
+    try:
+        data = request.get_json()
+        new_password = data.get('new_password')
+        current_password = data.get('current_password')
+
+        if not new_password or not current_password:
+            return jsonify({"message": "all fields are required"}), 400
+
+        # verify current password
+        if not current_user.check_password(current_password):
+            return jsonify({"message": "current password is incorrect"}), 400
+
+        # update the password
+        current_user.password = generate_password_hash(new_password)
+        db.session.commit()
+
+        return jsonify({"message": "password updated!"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": "error"}), 500
 
 @app.route('/about')
 @login_required
