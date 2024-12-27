@@ -545,6 +545,24 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     overflow: hidden;
 }
+.transaction-box {
+    background-color: #2d2d2f;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-box h3 {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.transaction-box p {
+    margin: 3px 0;
+    font-size: 0.9rem;
+}
+
 
 .search-input {
     flex: 1;

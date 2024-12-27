@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from decimal import Decimal
-from models import db, User, Event, Attendance
+from models import db, User, Event, Attendance, Transaction
   #add user & event class from models.py so we can create new users and events
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
