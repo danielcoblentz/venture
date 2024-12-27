@@ -148,10 +148,12 @@ document.addEventListener("DOMContentLoaded", () => {
     //logic for displaying event details to the user
     const previewName = document.getElementById("preview-name");
     const previewDate = document.getElementById("preview-date");
+    const previewEndTime = document.getElementById("preview-end-time");
     const previewLocation = document.getElementById("preview-location");
     const previewCost = document.getElementById("preview-cost");
     const previewDescription = document.getElementById("preview-description");
     const attendButton = document.getElementById("attend-button");
+    const deleteForm = document.getElementById("delete-form");
 
 
 
@@ -160,16 +162,26 @@ document.addEventListener("DOMContentLoaded", () => {
         const eventId = eventBox.getAttribute("data-id");
         const eventName = eventBox.getAttribute("data-name");
         const eventDate = eventBox.getAttribute("data-date");
+        const eventEndTime = eventBox.getAttribute("data-end-time");
         const eventLocation = eventBox.getAttribute("data-location");
         const eventCost = eventBox.getAttribute("data-cost");
         const eventDescription = eventBox.getAttribute("data-description");
+        const isCreator = eventBox.dataset.creator === "true";
 
         // populate the preview panel with event details from the event container
         previewName.textContent = `Name: ${eventName}`;
         previewDate.textContent = `Date: ${eventDate}`;
+        previewEndTime.textContent = `End Time: ${eventEndTime}`;
         previewLocation.textContent = `Location: ${eventLocation}`;
         previewCost.textContent = `Cost: ${eventCost}`;
         previewDescription.textContent = `Description: ${eventDescription}`;
+
+        if (isCreator) {
+            deleteForm.style.display = "block";
+            deleteForm.action = `/delete_event/${eventId}`;
+        } else {
+            deleteForm.style.display = "none";
+        }
 
         // display the attend button 
         attendButton.style.display = "block";

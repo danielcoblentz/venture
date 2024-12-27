@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime 
 
 db = SQLAlchemy()
 
@@ -25,11 +26,13 @@ class Event(db.Model):
     organizer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     event_name = db.Column(db.String(255), nullable=False)
     event_date = db.Column(db.Date, nullable=False)
+    end_time = db.Column(db.Date, nullable=True)
     location = db.Column(db.String(255), nullable=False)
     cost = db.Column(db.Numeric(10, 2), nullable=False, default=0.00)
     description = db.Column(db.Text)
     link = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    
 
 class Attendance(db.Model):
     __tablename__ = 'attendance'

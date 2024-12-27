@@ -5,6 +5,7 @@ from decimal import Decimal
 from models import db, User, Event, Attendance
   #add user & event class from models.py so we can create new users and events
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -137,6 +138,7 @@ def create_event():
         event_name = request.form.get('event_name')
         event_link = request.form.get('event_link')
         event_date = request.form.get('event_date')
+        event_end_time = request.form.get('event_end_time')
         event_location = request.form.get('event_location')
         event_cost = request.form.get('event_cost')
         event_description = request.form.get('event_description')
@@ -148,14 +150,19 @@ def create_event():
 
         # create event and add to DB
         try:
+            parsed_event_date = datetime.strptime(event_date, '%Y-%m-%d').date()
+            parsed_end_time = datetime.strptime(event_end_time, '%Y-%m-%d').date()
+        
             new_event = Event (
                 organizer_id=current_user.id,
                 event_name=event_name,
                 event_date=event_date,
+                end_time=parsed_end_time,
                 location=event_location,
                 cost=event_cost,
                 description=event_description,
                 link=event_link
+                
             )
 
             db.session.add(new_event)
@@ -192,19 +199,19 @@ def attend_event(event_id):
         # Check if the user is already attending the event
         existing_attendance = Attendance.query.filter_by(user_id=current_user.id, event_id=event_id).first()
         if existing_attendance:
-            return jsonify({"message": "You are already registered for this event"}), 400
+            return jsonify({"message": "you are already registered for this event"}), 400
 
         # add attendance record
         attendance = Attendance(user_id=current_user.id, event_id=event_id)
         db.session.add(attendance)
 
-        # commit changes to DB
+        # commit changes to DB + print confirmation message
         db.session.commit()
-        return jsonify({"message": "Successfully registered"}), 200
+        return jsonify({"message": "successfully registered"}), 200
 
     except Exception as e:
         db.session.rollback()
-        return jsonify({"message": "An error occurred"}), 500
+        return jsonify({"message": "an error occurred"}), 500
 
 # ------------------------------------------------------------------------------------------------------------>
 # fetch registered events
@@ -260,6 +267,31 @@ def add_balance():
         db.session.rollback()
 
     return redirect(url_for('account'))
+
+# ------------------------------------------------------------------------------------
+#delete event
+@app.route('/delete_event/<int:event_id>', methods=['POST'])
+@login_required
+def delete_event(event_id):
+    # get the event by its ID
+    event = Event.query.get_or_404(event_id)
+
+    #  current user is the creator of the event?
+    if event.organizer_id != current_user.id:
+        flash("you do not have permission to delete this event")
+        return redirect(url_for('home'))
+
+    # delete the event
+    try:
+        db.session.delete(event)
+        db.session.commit()
+        flash("Event deleted")
+    except Exception as e:
+        db.session.rollback()
+        flash("an error occurred while deleting the event")
+    
+    return redirect(url_for('home'))
+
 
 
 @app.route('/account')

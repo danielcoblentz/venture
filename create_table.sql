@@ -1,1 +1,1 @@
-SELECT * FROM attendance;
+ALTER TABLE event MODIFY COLUMN end_time DATE;
