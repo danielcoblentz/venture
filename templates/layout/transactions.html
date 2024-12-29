@@ -64,32 +64,23 @@
 
             <!--placeholder for transactions list-->
             <div class="transactions-content">
-                {% if transactions %}
-                    <table class="transactions-table">
-                        <thead>
-                            <tr>
-                                <th>Event Name</th>
-                                <th>Date</th>
-                                <th>Amount</th>
-                                <th>Type</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for transaction in transactions %}
-                                <tr>
-                                    <td>{{ events.get(transaction.event_id, {}).get('event_name', 'Other') }}</td>
-                                    <td>{{ transaction.transaction_date }}</td>
-                                    <td>${{ transaction.amount }}</td>
-                                    <td>{{ transaction.transaction_type }}</td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                {% else %}
-                    <p>no transactions available</p>
-                {% endif %}
+                <table class="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be dynamically populated using JavaScript -->
+                    </tbody>
+                </table>
+                <p class="no-transactions" style="display: none;">No transactions available.</p>
             </div>
         </main>
     </div>
+
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
 </body>
 </html>
