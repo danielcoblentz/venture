@@ -1,59 +1,71 @@
-# venture: Event management system
+# Venture: Event Management System
 
-Venture is a Flask-based web application that allows users to sign up, log in, and manage events. The system supports user authentication, role-based permissions (users & organizers), and event-related functionalities such as creating, reading, updating, and deleting events. This project is integrated with a MySQL database and uses Flask-Login for session management.
-
-## Tech stack
-* backend: Flask, Flask-SQLALchemy, Flask-Login
-* backend: HTML, CSS, JS
-* Database: MySQL
-* icons: Google fonts -> icons tab
-
+**Venture** is a Flask-based web application designed to simplify event management for users and organizers. With secure user authentication, role-based permissions, and an intuitive interface, Venture offers tools for creating, managing, and attending events.
 
 ## Features
-* User Authentication:
-    - Secure user registration and login using hashed passwords.
-    - Role-based user access (user, organizer).
 
-* Event Management:
-    - Organizers can perform all necessary CRUD operations and fill out forms for creating events with details such as name, date, location, and cost.
-    - users can view and participate in events.
+### User Management
+- Secure user registration and login with hashed passwords.
+- Role-based access:
+  - **Users** can view and participate in events.
+  - **Organizers** can create, update, and delete events.
 
-* Database integration:
-    - MySQL is used to store user data, event details and transactions.
+### Event Management
+- Organizers can perform full CRUD operations for events.
+- Events include details such as:
+  - Name
+  - Date and time
+  - Location
+  - Cost
+  - Description
+  - Tags (e.g., Workshop, Conference, Meetup)
+- Users can search for events by name and register to attend.
 
-* Secure sessions:
-    - Flask-Login manages user sessions and protects restricted routes.
+### Financial Transactions
+- Users can add balance to their accounts.
+- Event registration deducts the ticket cost from the user’s balance.
+- View transaction history, including all previous completed transactions.
+
+### Secure Sessions
+- Sessions managed with Flask-Login.
+- MySQL database integration for data storage.
+- Input validation and error handling functions built in.
+
+## Tech Stack
+
+- **Backend:** Flask, Flask-SQLAlchemy, Flask-Login
+- **Frontend:** HTML, CSS, JavaScript
+- **Database:** MySQL
+- **Icons:** Google Fonts, Remixicon, Devicon
 
 ## Installation
 
 ### Prerequisites
-    - Python 3.7 or above
-    - MySQL server or other database
-    - A virtual environment for dependency isolation
+- Python 3.7 or higher
+- MySQL server
+- A virtual environment (recommended)
 
-### Installation and Setup
-1) Clone the Repository: Begin by cloning the repository to your local machine to get all the necessary files:
-```
-https://github.com/danielcoblentz/venture
-```
+### Steps to Install and Run
 
-2) Set up a virtual environment:
-```
-python -m venv venv
-# on mac: source venv/bin/activate  # on windows: venv\Scripts\activate
-```
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/danielcoblentz/venture.git
+   cd venture
+   ```
+2. **Set up a Virtual Environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # for windows: ./venv/Scripts/Activate
+   ```
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. **Configure the database**
+   - Create a MySQL databse
+   - Update the databse URI in `app.py`
 
-3) Install dependencies:
-```
-pip install -r requirements.txt
-```
-
-4) configure the database:
-    - Create a MySQL databse, then update the databse URI in app.py below
-    ```
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:<password>@localhost/database_name'
-    ```
-5) Run the application:
-```
-python app.py
-```
+5. **start the Application**
+   ```bash
+   python app.py
+   ```
