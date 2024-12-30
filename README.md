@@ -61,11 +61,16 @@
    ```bash
    pip install -r requirements.txt
    ```
-4. **Configure the database**
+4. **Configure the Database**
    - Create a MySQL databse
    - Update the databse URI in `app.py`
 
-5. **start the Application**
+5. **Configure the Payments (optional)**
+   - navigate to `app.py` & `stripe.js` (stripe.js located in scripts folder)
+   - input personal API keys (secret & pusblished) to run.
+   - if there is no need for the payment API you can remove the following functions in `app.py`.("create_payment_intent" & "stripe_webhook") this will enable a sandbox payment method for demo purposes.
+
+6. **Run the Application Locally**
    ```bash
    python app.py
    ```
