@@ -31,7 +31,7 @@ class Event(db.Model):
     organizer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     event_name = db.Column(db.String(255), nullable=False)
     event_date = db.Column(db.Date, nullable=False)
-    end_time = db.Column(db.Date, nullable=True)  # Add this line
+    end_time = db.Column(db.Date, nullable=True) 
     location = db.Column(db.String(255), nullable=False)
     cost = db.Column(db.Numeric(10, 2), nullable=False, default=0.00)
     description = db.Column(db.Text)
@@ -41,7 +41,7 @@ class Attendance(db.Model):
     __tablename__ = 'attendance'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)  # Corrected
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'), nullable=False)
     attended_at = db.Column(db.DateTime, default=db.func.now())
 
 class Transaction(db.Model):

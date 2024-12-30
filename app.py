@@ -6,10 +6,13 @@ from models import db, User, Event, Attendance, Transaction
   #add user & event class from models.py so we can create new users and events
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import stripe
 
+# stripe API keyi -- get from stripe website (search --> developer > API keys)
+stripe.api_key = "enter secret key here"
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = None
+app.config['SQLALCHEMY_DATABASE_URI'] = "enter DB endpoint+ credentials here"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 
@@ -24,7 +27,6 @@ def load_user(user_id):
 
 # requirements
 # define the following base routes --> home, create, transactions, login/signup, acc, about, logout + additional routes as needed
-
 # home route for redering main page + searching events
 @app.route('/')
 @login_required
@@ -363,6 +365,58 @@ def update_password():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "error"}), 500
+    # ------------------------------------------------------------------------------------>
+    # stripe integration for payments (optional -- to use defualt currency method remove hte following functions ("create_payment_intent" & "stripe_webhook"))
+@app.route('/create-payment-intent', methods=['POST'])
+@login_required
+def create_payment_intent():
+    try:
+        data = request.get_json()
+        amount = int(data.get('amount', 0))  # amount should be in cents
+
+        if amount <= 0:
+            return jsonify({"error": "Invalid payment amount"}), 400
+
+        # Create a PaymentIntent
+        intent = stripe.PaymentIntent.create(
+            amount=amount,
+            currency="usd",
+            metadata={"user_id": current_user.id}  # metadata
+        )
+
+        return jsonify({"clientSecret": intent['client_secret']})
+    except Exception as e:
+        return jsonify({"error": "unable to create payment intent"}), 500
+
+# ------------------------------------------------------------------------------------>
+@app.route('/stripe-webhook', methods=['POST'])
+def stripe_webhook():
+    payload = request.get_data(as_text=True)
+    sig_header = request.headers.get('Stripe-Signature')
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, ''
+        )
+    except ValueError as e:
+        print(f"Invalid payload: {e}")
+        return jsonify(success=False), 400
+    except stripe.error.SignatureVerificationError as e:
+        print(f"Invalid signature: {e}")
+        return jsonify(success=False), 400
+
+    if event['type'] == 'payment_intent.succeeded':
+        payment_intent = event['data']['object']
+        amount = payment_intent['amount'] / 100  # convert cents to dollars
+        user_id = payment_intent['metadata']['user_id']
+
+        user = User.query.get(user_id)
+        if user:
+            user.balance += Decimal(amount)
+            db.session.commit()
+
+    return jsonify(success=True), 200
+
 # ------------------------------------------------------------------------------------>
 @app.route('/about')
 @login_required
