@@ -66,9 +66,9 @@
    - Update the databse URI in `app.py`
 
 5. **Configure the Payments (optional)**
-   - navigate to `app.py` & `stripe.js` (stripe.js located in scripts folder)
-   - input personal API keys (secret & pusblished) to run.
-   - if there is no need for the payment API you can remove the following functions in `app.py`.("create_payment_intent" & "stripe_webhook") this will enable a sandbox payment method for demo purposes.
+   - Navigate to `app.py` & `stripe.js` (stripe.js located in scripts folder)
+   - Input personal API keys (secret & pusblished) to run.
+   - If there is no need for the payment API you can remove the following functions in `app.py`.("create_payment_intent" & "stripe_webhook") this will enable a sandbox payment method for demo purposes.
 
 6. **Run the Application Locally**
    ```bash
