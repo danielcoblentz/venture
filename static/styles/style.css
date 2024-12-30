@@ -1,4 +1,4 @@
-/* Global styles -- Dashboard Page */
+/* Global styles -- home page */
 body {
     font-family: 'Noto Sans', sans-serif;
     background-color: #1b1c1e;
@@ -22,7 +22,7 @@ body {
 /*event Container */
 .event-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* three equal columns */
+    grid-template-columns: repeat(3, 1fr); /*three equal columns */
     gap: 15px; 
     padding: 20px 0 20px 20px;
     margin-top: 0px;
@@ -57,7 +57,6 @@ body {
     width: 128px;
 }
 
-
 /*nav sidebar */
 .sidebar {
     background-color: #1b1c1e;
@@ -88,7 +87,6 @@ body {
     border-color: #888; 
     color: #e3e3e3; 
 }
-
 /*sidebar header*/
 .nav-header {
     display: flex;
@@ -193,9 +191,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
 }
-
 /* ---------------------------------------- icons + layout adjustments*/
-
 /*event actions container*/
 .event-actions {
     display: flex;
@@ -282,7 +278,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7); /*dark overlay -- create depth effect*/ 
+    background: rgba(0, 0, 0, 0.7);
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -446,12 +442,10 @@ body {
     margin: 20px 0;
     width: 100%;
 }
-
 /*pasword section*/
 .password-section {
     width: 100%;
 }
-
 .password-header {
     display: flex;
     justify-content: space-between; 
@@ -509,13 +503,13 @@ body {
     cursor: pointer;
 }
 /*(Transaction page)------------------------------*/
-/*transactions wrapper class*/
 .transactions-wrapper {
     background-color: #1b1c1e;
     color: #fff;
     padding: 30px;
     border-radius: 8px;
     max-width: 1200px;
+    width: 400px;
     margin: 20px auto;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
@@ -528,6 +522,10 @@ body {
     text-align: left;
 }
 
+.transactions-table {
+    width: 100%; 
+    border-collapse: collapse; 
+}
 /*divider below transaction header*/
 .divider {
     width: 100%;
@@ -535,15 +533,8 @@ body {
     border-top: 1px solid #444;
     margin-bottom: 20px;
 }
-
-/* search bar (event name, tag, date)*/
-.combined-search-bar {
-    display: flex;
-    align-items: center;
-    background-color: #2d2d2f;
-    border-radius: 4px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
+th {
+    text-align: left; /*changes the alignment of event name, cost, date*/
 }
 .transaction-box {
     background-color: #2d2d2f;
@@ -551,27 +542,19 @@ body {
     border-radius: 8px;
     margin-bottom: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
 }
 
 .transaction-box h3 {
     font-size: 1.2rem;
     margin-bottom: 5px;
+    text-align: left;
 }
 
 .transaction-box p {
     margin: 3px 0;
     font-size: 0.9rem;
-}
-
-
-.search-input {
-    flex: 1;
-    padding: 12px;
-    font-size: 14px;
-    color: #e3e3e3;
-    background-color: #2d2d2f;
-    border: none;
-    box-shadow: none;
+    text-align: left;
 }
 /*placeholder text color -- keep consistant*/
 .search-input::placeholder {
@@ -596,7 +579,7 @@ body {
     border-radius: 8px;
     padding: 20px;
     min-height: 400px;
-    text-align: center;
+    text-align: left;
     color: #aaa;
     margin-top: 20px;
 }
@@ -620,7 +603,7 @@ body {
     text-align: left;
 }
 
-/*divider under create <h1>*/
+/*divider under create header*/
 .divider {
     width: 100%;
     border: none;
@@ -679,7 +662,6 @@ body {
 .form-submit {
     justify-content: flex-end;
 }
-
 .create-btn {
     background-color: #4285f4;
     color: #e3e3e3;

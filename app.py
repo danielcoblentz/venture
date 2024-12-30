@@ -23,7 +23,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 # requirements
-# define the following routes --> home, create, transactions, login/signup, acc, about, logout + additional functions for attending events, searching etc..
+# define the following base routes --> home, create, transactions, login/signup, acc, about, logout + additional routes as needed
 
 # home route for redering main page + searching events
 @app.route('/')
@@ -41,7 +41,6 @@ def home():
         events = Event.query.all()
     
     return render_template('/layout/home.html', current_user=current_user, events=events)
-
 
 # register/signup route --------------------------------------------------------------------------------->
 @app.route('/register', methods=['GET', 'POST'])
@@ -86,7 +85,6 @@ def register():
     # If GET request then just render the signup page as is
     return render_template('layout/signup.html')
 
-
 # login route ------------------------------------------------------------------------------------------------------>
 @app.route('/login', methods=['GET', 'POST'])
 
@@ -96,16 +94,15 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-    # check credentials
+    # check creds against DB
         user = User.query.filter_by(email=email).first()
         if not user or not user.check_password(password):
-            flash('Invalid email or password.', 'danger')
+            flash('invalid email or password.', 'danger')
             return redirect(url_for('login'))
 
         login_user(user)
         return redirect(url_for('home'))
     return render_template('layout/login.html')
-
 
 # event_details route for displaying content on home page & for preview pannel details ----------------------------->
 @app.route('/event-details/<int:event_id>')
@@ -121,64 +118,50 @@ def event_details(event_id):
         "description": event.description
     }
 
-# create route(needs to be an organizer to view page, if user status then dont allow acces ---------------------------->
-
+# create route(needs to be an organizer to view page, if user status then dont allow acces! ---------------------------->
 @app.route('/create', methods=['GET', 'POST'])
 @login_required
-
 def create_event():
-    # check if current_user is an organizer
     if current_user.role != 'organizer':
-        flash('you do not have permission to create events, you may only attend them')
-        return redirect(url_for('home')) # redirect them back to home if user permissions are active
-    
+        flash("Only organizers can create events.", 'danger')
+        return redirect(url_for('home'))
 
-    # if organizer then collect event info to be inserted
     if request.method == 'POST':
-        event_name = request.form.get('event_name')
-        event_link = request.form.get('event_link')
-        event_date = request.form.get('event_date')
-        event_end_time = request.form.get('event_end_time')
-        event_location = request.form.get('event_location')
-        event_cost = request.form.get('event_cost')
-        event_description = request.form.get('event_description')
-        event_tags = request.form.get('event_tags')
-
-        # validate input fields
-        if not event_name or not event_date or not event_location or not event_cost:
-            return redirect(url_for('create_event'))
-
-        # create event and add to DB
         try:
-            parsed_event_date = datetime.strptime(event_date, '%Y-%m-%d').date()
-            parsed_end_time = datetime.strptime(event_end_time, '%Y-%m-%d').date()
-        
-            new_event = Event (
+            # collect form data
+            event_name = request.form.get('event_name')
+            event_date = request.form.get('event_date')
+            end_time = request.form.get('end_time')
+            location = request.form.get('event_location')
+            cost = request.form.get('event_cost', type=float)
+            description = request.form.get('event_description')
+            tags = request.form.get('event_tags')
+
+            # Validate inputs
+            if not all([event_name, event_date, location, cost]):
+                flash("All fields except 'description' are required.", 'danger')
+                return redirect(url_for('create_event'))
+
+            # Create and add the event
+            new_event = Event(
                 organizer_id=current_user.id,
                 event_name=event_name,
-                event_date=event_date,
-                end_time=parsed_end_time,
-                location=event_location,
-                cost=event_cost,
-                description=event_description,
-                link=event_link
-                
+                event_date=datetime.strptime(event_date, '%Y-%m-%d'),
+                end_time=datetime.strptime(end_time, '%Y-%m-%d') if end_time else None,
+                location=location,
+                cost=Decimal(str(cost)),
+                description=description
             )
-
             db.session.add(new_event)
             db.session.commit()
-
-            # after inserting event send confirmation message
-            flash('event created successfully!')
+            flash("Event created successfully!", 'success')
             return redirect(url_for('home'))
-        
-        # if an error occurs then rollback
+
         except Exception as e:
             db.session.rollback()
-            flash('an error occurred while creating the event, please try again.')
+            flash("an error occurred while creating the event.", 'danger')
             return redirect(url_for('create_event'))
 
-    #if a GET request and user is organizer, show the create event page
     return render_template('layout/create.html')
 
 # route for attending events --------------------------------------------------------------------------------------->
@@ -186,35 +169,47 @@ def create_event():
 @login_required
 def attend_event(event_id):
     try:
-        # Fetch event details
+        # get the event
         event = Event.query.get_or_404(event_id)
 
-        # Check if user has sufficient balance
-        if current_user.balance < event.cost:
-            return jsonify({"message": "Insufficient balance"}), 400
+        # check current user acc balance
+        if current_user.balance < Decimal(event.cost):
+            flash("insufficient balance.", 'danger')
+            return jsonify({"message": "insufficient balance"}), 400
 
-        # Deduct the balance
-        current_user.balance -= event.cost
+        # deduct balance
+        current_user.balance -= Decimal(event.cost)
 
-        # Check if the user is already attending the event
+        # Check if already registered
         existing_attendance = Attendance.query.filter_by(user_id=current_user.id, event_id=event_id).first()
         if existing_attendance:
-            return jsonify({"message": "you are already registered for this event"}), 400
+            flash("you are already registered for this event.", 'danger')
+            return jsonify({"message": "already registered"}), 400
 
-        # add attendance record
+        # add current user to attendance record for that event
         attendance = Attendance(user_id=current_user.id, event_id=event_id)
         db.session.add(attendance)
 
-        # commit changes to DB + print confirmation message
+        # Add to current users transaction record
+        transaction = Transaction(
+            user_id=current_user.id,
+            transaction_type='ticket_purchase',
+            amount=event.cost,
+            event_id=event_id
+        )
+        db.session.add(transaction)
+
         db.session.commit()
+        flash("successfully registered for the event.", 'success')
         return jsonify({"message": "successfully registered"}), 200
 
     except Exception as e:
         db.session.rollback()
+        print(f"error attending event: {e}")
         return jsonify({"message": "an error occurred"}), 500
 
 # ------------------------------------------------------------------------------------------------------------>
-# fetch registered events
+# fetch registered events for current user
 @app.route('/my-events', methods=['GET'])
 @login_required
 def my_events():
@@ -235,41 +230,64 @@ def my_events():
 
         return jsonify(events_data), 200
     except Exception as e:
-        return jsonify({"message": "Failed to fetch events"}), 500
+        return jsonify({"message": "cannot fetch events, try again"}), 500
 
 # ------------------------------------------------------------------------------------------------------------->
-
-# other routes will add logic soon
+# view transaction route (transaction page if no transactions then just render the html page)
 @app.route('/transactions')
 @login_required
-
 def view_transactions():
-    return render_template('layout/transactions.html')
+    transactions = Transaction.query.filter_by(user_id=current_user.id).all()
 
+    transactions_data = []
+    for transaction in transactions:
+        event_name = "Account Deposit" if not transaction.event_id else Event.query.get(transaction.event_id).event_name
+        formatted_date = transaction.transaction_date.strftime('%b %d')  # display only month and day
+        transactions_data.append({
+            "event_name": event_name,
+            "amount": f"{transaction.amount}",
+            "transaction_date": formatted_date,  # formatting date (Month / Day)
+        })
+
+    return render_template('layout/transactions.html', transactions=transactions_data)
+
+# ------------------------------------------------------------------------------------------------------------->
 # add money to account
 @app.route('/add-balance', methods=['POST'])
 @login_required
 def add_balance():
     try:
-        # get the amount and convert it to Decimal
+        # get the amount from the form
         amount = request.form.get('amount', type=float)
 
         if not amount or amount <= 0:
-            flash(' enter a valid positive amount.', 'danger')
+            flash('please enter a valid positive amount.', 'danger')
             return redirect(url_for('account'))
 
-        current_user.balance += Decimal(str(amount))  
+        # update curr user balance
+        current_user.balance += Decimal(str(amount))
 
-        db.session.commit()# update message
+        # create a transaction entry for adding money
+        transaction = Transaction(
+            user_id=current_user.id,
+            transaction_type='add_money',
+            amount=Decimal(str(amount)),
+            event_id=None
+        )
+        db.session.add(transaction)
+        db.session.commit()
+
+        #message to user after adding currency
         flash(f'your balance has been updated by ${amount:.2f}.', 'success')
+        return redirect(url_for('account'))
 
     except Exception as e:
         db.session.rollback()
+        flash('An error happend while processing transaction.', 'danger')
+        return redirect(url_for('account'))
 
-    return redirect(url_for('account'))
-
-# ------------------------------------------------------------------------------------
-#delete event
+# ------------------------------------------------------------------------------------>
+#delete event only if that user created that specific event
 @app.route('/delete_event/<int:event_id>', methods=['POST'])
 @login_required
 def delete_event(event_id):
@@ -278,7 +296,7 @@ def delete_event(event_id):
 
     #  current user is the creator of the event?
     if event.organizer_id != current_user.id:
-        flash("you do not have permission to delete this event")
+        flash("you do not have permission to delete this event!")
         return redirect(url_for('home'))
 
     # delete the event
@@ -292,14 +310,14 @@ def delete_event(event_id):
     
     return redirect(url_for('home'))
 
-
-
+# ------------------------------------------------------------------------------------>
+#route for rendering account page
 @app.route('/account')
 @login_required
 
 def account():
     return render_template('layout/account.html')
-
+# ------------------------------------------------------------------------------------>
 # update email route (account page)
 @app.route('/update-email', methods=['POST'])
 @login_required
@@ -320,7 +338,7 @@ def update_email():
         db.session.rollback()
         return jsonify({"message": "error occurred"}), 500
 
-
+# ------------------------------------------------------------------------------------>
 # update password route (account page)
 @app.route('/update-password', methods=['POST'])
 @login_required
@@ -345,13 +363,13 @@ def update_password():
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": "error"}), 500
-
+# ------------------------------------------------------------------------------------>
 @app.route('/about')
 @login_required
 
 def about(): # done no further features needed
     return render_template('layout/about.html')
-
+# ------------------------------------------------------------------------------------>
 @app.route('/logout')
 @login_required
 
@@ -359,7 +377,7 @@ def logout():
     logout_user()
     flash('you have been logged out')
     return redirect(url_for('login'))
-
+# ------------------------------------------------------------------------------------>
 if __name__ == '__main__':
     print("Starting Flask server...")
     app.run(debug=True, port=5000)

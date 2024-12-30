@@ -6,7 +6,6 @@
     <title>Account</title>
     <link rel="stylesheet" href="static\styles\style.css">
     
-
      <!--fonts for page--> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,16 +87,16 @@
                 </div>
             </div>
 
-            <!-- Existing forms and sections -->
 
-<!-- divider for balance -->
+<!-- divider for different secitons (email/pass // currency) -->
         <hr class="divider">
 
         <!-- add balance section -->
         <div class="section balance-section">
             <h4>Balance</h4>
-            <p>Current Balance: <strong>${{ current_user.balance }}</strong></p> <!-- Display user's current balance -->
+            <p>Current Balance: <strong>${{ current_user.balance }}</strong></p> <!--display user's current balance -->
 
+                <!--add currency to curr account form-->
             <form action="{{ url_for('add_balance') }}" method="POST" class="balance-form">
                 <label for="add-balance">Add Balance:</label>
                 <input 

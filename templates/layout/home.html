@@ -115,7 +115,7 @@
             <p id="preview-description">Description: </p>
             <button id="attend-button">Attend Event</button>
             
-            <!--delete button always present but hidden initially-->
+            <!--delete button always present but hidden initially unless an 'organizer' status-->
             <form id="delete-form" action="#" method="POST" class="delete-form" style="display: none;">
                 <button type="submit" class="delete-btn" onclick="return confirm('are you sure you want to delete this event?')">Delete</button>
             </form>
@@ -172,7 +172,7 @@
         </div>
     </div>
 
-    <!-- link to JS -->
+    <!-- link to JS file -->
     <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
 
 </body>

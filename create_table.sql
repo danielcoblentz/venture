@@ -1,1 +1,1 @@
-ALTER TABLE event MODIFY COLUMN end_time DATE;
+--using this file for running queries into DB

@@ -1,6 +1,4 @@
-
 const DEBUG = false;
-
 document.addEventListener("DOMContentLoaded", () => {
     //(Home page)
     // search wrapper section
@@ -83,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 } catch (error) {
                     console.error("Error updating email:", error);
-                    alert("An error occurred while updating your email.");
+                    alert("an error occurred while updating your email");
                 }
             }
         });
@@ -208,9 +206,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         } catch (error) {
             console.error("error attending the event:", error);
-            alert("error occurred while processing your request.");
+            alert("error occurred while processing your request");
         }
     }
+
 
 
     // fetch and display registered events(neede for star icon on home page)
@@ -222,12 +221,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const events = await response.json();
             if (DEBUG) console.log("fetched events:", events);
 
-            // clear event container(home.hmtl)
+            // clear event container( on home.hmtl)
             const eventContainer = document.querySelector(".event-container");
             eventContainer.innerHTML = "";
 
             if (events.length === 0) {
-                eventContainer.innerHTML = "<p>You are not registered for any events.</p>";
+                eventContainer.innerHTML = "<p>You are not registered for any events</p>";
             } else {
                 events.forEach((event) => {
                     if (DEBUG) console.log("Processing event:", event);
@@ -247,7 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         } catch (error) {
             console.error("error fetching registered events:", error);
-            alert("An error occurred while fetching your registered events.");
+            alert("an error occurred while fetching your registered events.");
         }
     }
 
